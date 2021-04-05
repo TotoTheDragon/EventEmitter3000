@@ -1,0 +1,32 @@
+{
+  "name": "eventemitter3000",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "ts-mocha src/test/*.ts",
+    "prebuild": "shx rm -rf lib/",
+    "build": "tsc"
+  },
+  "author": "DeveloperDragon <mrdragonplays2683@gmail.com> (http://developerdragon.com)",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/benchmark": "^2.1.0",
+    "@types/eventemitter2": "^4.1.0",
+    "@types/eventemitter3": "^2.0.2",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^14.14.37",
+    "benchmark": "^2.1.4",
+    "drip": "^1.4.0",
+    "eventemitter2": "^6.4.4",
+    "eventemitter3": "^4.0.7",
+    "fast-event-emitter": "0.0.2",
+    "mocha": "^8.3.2",
+    "shx": "^0.3.3"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/index.d.ts"
+  ]
+}
