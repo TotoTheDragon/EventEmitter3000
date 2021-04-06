@@ -1,26 +1,26 @@
+import assert from "assert";
 import { EventEmitter3000 } from "..";
 
 describe("add-remove", () => {
 
     it("emits after adding on listener", (done) => {
-        const emitter = new EventEmitter3000();
-        emitter.on("foo", done);
-        emitter.emit("foo");
+        new EventEmitter3000()
+            .on("foo", done)
+            .emit("foo");
 
     });
 
     it("emits after adding once listener", (done) => {
-        const emitter = new EventEmitter3000();
-        emitter.once("foo", done);
-        emitter.emit("foo");
+        new EventEmitter3000()
+            .once("foo", done)
+            .emit("foo");
     });
 
-    it("does not emit after removing all listeners", (done) => {
-        const emitter = new EventEmitter3000();
-        emitter.on("foo", done);
-        emitter.removeAllListener("foo");
-        emitter.emit("foo", new Error("emitted"));
-        return done();
+    it("does not emit after removing all listeners", () => {
+        new EventEmitter3000()
+            .on("foo", () => assert.fail("emitted listener after removing"))
+            .removeAllListener("foo")
+            .emit("foo");
     });
 
 });

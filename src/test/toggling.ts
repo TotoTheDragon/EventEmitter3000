@@ -1,5 +1,4 @@
 import assert from "assert";
-import { emit } from "node:process";
 import { EventEmitter3000 } from "..";
 
 describe('disable -> enable', () => {
@@ -8,9 +7,6 @@ describe('disable -> enable', () => {
         const emitter = new EventEmitter3000();
         assert.strictEqual(emitter.isEnabled("foo"), true);
     })
-
-
-
 
     it("returns false after disabling", () => {
         const emitter = new EventEmitter3000();
@@ -29,7 +25,7 @@ describe('disable -> enable', () => {
     it("does not emit after disabling", (done) => {
         const emitter = new EventEmitter3000();
         emitter.disable("foo");
-        emitter.on("foo", () => done(new Error("emitted")));
+        emitter.on("foo", () => assert.fail("emitted after disabling"));
         emitter.emit("foo");
         return done();
     })

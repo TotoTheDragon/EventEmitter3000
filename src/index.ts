@@ -3,19 +3,21 @@ export class EventEmitter3000 {
     private _disabled: object = new Object();
     private _events: object = new Object();
 
-    disable(event: string) {
+    disable(event: string): EventEmitter3000 {
         this._disabled[event] = true;
+        return this;
     }
 
-    enable(event: string) {
+    enable(event: string): EventEmitter3000 {
         delete this._disabled[event];
+        return this;
     }
 
     isEnabled(event: string) {
         return !this._disabled[event];
     }
 
-    addListener(event: string, fn: (...args: any) => any, once?: boolean) {
+    addListener(event: string, fn: (...args: any) => any, once?: boolean): EventEmitter3000 {
         if (!this._events[event]) this._events[event] = { fn, once };
 
         else if (this._events[event].fn)
@@ -41,11 +43,11 @@ export class EventEmitter3000 {
         return this._events[event].length;
     }
 
-    removeListener(event: string, fn: (...args: any) => any) {
+    removeListener(event: string, fn: (...args: any) => any): EventEmitter3000 {
         const listeners = this._events[event];
 
         if (!listeners)
-            return false;
+            return this;
 
         if (listeners.fn === fn) {
             this._events[event] = null;
@@ -86,24 +88,25 @@ export class EventEmitter3000 {
 
 
         }
+
+        return this;
     }
 
-    removeAllListener(event: string, fn?: (...args: any) => any) {
+    removeAllListener(event: string, fn?: (...args: any) => any): EventEmitter3000 {
         const listeners = this._events[event];
 
-        if (!fn)
-            return delete this._events[event];
-
+        if (!fn) {
+            delete this._events[event];
+            return this;
+        }
         if (!listeners)
-            return false;
+            return this;
 
         if (listeners.fn) {
             if (listeners.fn === fn) {
                 this._events[event] = null;
-                return true;
             }
-            else
-                return false;
+            return this;
         }
 
         let found = 0;
@@ -112,13 +115,13 @@ export class EventEmitter3000 {
             if (listeners[i].fn === fn) ++found;
 
         if (found === 0)
-            return false;
+            return this;
 
         const length = listeners.length - found;
 
         if (length === 0) {
             this._events[event] = null;
-            return true;
+            return this;
         }
 
         const arr = new Array(length);
@@ -132,13 +135,14 @@ export class EventEmitter3000 {
             }
         }
         this._events[event] = arr;
+        return this;
     }
 
-    on(event: string, fn: (...args: any) => any) {
+    on(event: string, fn: (...args: any) => any): EventEmitter3000 {
         return this.addListener(event, fn);
     }
 
-    once(event: string, fn: (...args: any) => any) {
+    once(event: string, fn: (...args: any) => any): EventEmitter3000 {
         return this.addListener(event, fn, true);
     }
 
