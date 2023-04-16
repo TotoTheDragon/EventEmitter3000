@@ -181,6 +181,41 @@ export class EventEmitter3000 {
             }
     }
 
+    private async _callAsyncListeners(event: string, ...args: any[]): Promise<void> {
+        const listeners = this._events[event];
+        if (arguments.length === 1) {
+            for (let i = listeners.length - 1; i >= 0; --i) {
+                await listeners[i].fn();
+                if (listeners[i].once) this.removeListener(event, listeners[i].fn);
+            }
+        }
+        else if (arguments.length === 2)
+            for (let i = listeners.length - 1; i >= 0; --i) {
+                await listeners[i].fn(arguments[1]);
+                if (listeners[i].once) this.removeListener(event, listeners[i].fn);
+            }
+        else if (arguments.length === 3)
+            for (let i = listeners.length - 1; i >= 0; --i) {
+                await listeners[i].fn(arguments[1], arguments[2]);
+                if (listeners[i].once) this.removeListener(event, listeners[i].fn);
+            }
+        else if (arguments.length === 4)
+            for (let i = listeners.length - 1; i >= 0; --i) {
+                await listeners[i].fn(arguments[1], arguments[2], arguments[3]);
+                if (listeners[i].once) this.removeListener(event, listeners[i].fn);
+            }
+        else if (arguments.length === 5)
+            for (let i = listeners.length - 1; i >= 0; --i) {
+                await listeners[i].fn(arguments[1], arguments[2], arguments[3], arguments[4]);
+                if (listeners[i].once) this.removeListener(event, listeners[i].fn);
+            }
+        else
+            for (let i = listeners.length - 1; i >= 0; --i) {
+                await listeners[i].fn(...args);
+                if (listeners[i].once) this.removeListener(event, listeners[i].fn);
+            }
+    }
+   
     emit(event: string, ...args: any[]): boolean {
 
         if (this._disabled[event])
@@ -195,6 +230,24 @@ export class EventEmitter3000 {
         }
         else
             this._callListeners(event, ...args);
+
+        return true;
+    }
+
+    async asyncEmit(event: string, ...args: any[]): Promise<boolean> {
+
+        if (this._disabled[event])
+            return false;
+
+        if (!this._events[event])
+            return false;
+
+        if (this._events[event].fn) {
+            this._events[event].fn(...args);
+            if (this._events[event].once) this.removeListener(event, this._events[event].fn);
+        }
+        else
+            await this._callAsyncListeners(event, ...args);
 
         return true;
     }
