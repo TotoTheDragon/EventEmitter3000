@@ -243,7 +243,7 @@ export class EventEmitter3000 {
             return false;
 
         if (this._events[event].fn) {
-            this._events[event].fn(...args);
+            await this._events[event].fn(...args);
             if (this._events[event].once) this.removeListener(event, this._events[event].fn);
         }
         else
